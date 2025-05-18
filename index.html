@@ -7,7 +7,7 @@
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            box-sizing : border-box;
         }
 
         body {
@@ -154,7 +154,11 @@
 
         /* 打字机样式 */
         .typewriter {
-            font-family: '楷体';
+            font-family: 
+            'KaiTi',        /* Windows 通用 */
+            'STKaiti',      /* macOS/iOS */
+            'DFKai-SB',     /* Android */
+            cursive;        /* 最后回退 */
             line-height: 2;
             color: #5a3a3a;
             white-space: pre-wrap;
@@ -328,6 +332,14 @@
     <script>
         // 完全保留你原有的JavaScript代码
         let isEnvelopeOpened = false;
+        const audio = document.getElementById('bgm');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            isPlaying = !isPlaying;
+            isPlaying ? audio.play() : audio.pause();
+            document.querySelector('.music-control').textContent = isPlaying ? '🎶' : '🎵';
+        }
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: '🎵 音乐授权请求',
@@ -484,6 +496,8 @@
             showDenyButton: true,
             confirmButtonText: '当然愿意！',
             denyButtonText: '不要...才怪',
+            allowOutsideClick: false, // 新增：禁止点击外围关闭
+            allowEscapeKey: false,    // 新增：禁止ESC键关闭
             customClass: {
                 denyButton: 'swal-deny-btn'
             }
@@ -493,7 +507,9 @@
                     icon: 'warning',
                     title: '哼！由不得你～',
                     html: '<div style="color:#ff6b6b">重新选择吧 (>_<)</div>',
-                    confirmButtonText: '好好好我愿意'
+                    confirmButtonText: '好好好我愿意',
+                    allowOutsideClick: false, // 新增
+                    allowEscapeKey: false     // 新增
                 }).then(() => showLocationSelector());
             } else if (result.isConfirmed) {
                 showLocationSelector();
@@ -514,7 +530,7 @@ function showLocationSelector() {
     ];
 
     Swal.fire({
-        title: '✉️ 时间胶囊',
+        title: '✉️ 时间胶囊，你希望我们未来相遇在什么地方呢？',
         html: `<div style="text-align:left;margin:15px 0">
                 ${locations.map((loc,index) => `
                     <label style="display:block;margin:10px 0">
@@ -527,7 +543,9 @@ function showLocationSelector() {
         showCancelButton: true,
         confirmButtonText: '封印约定',
         cancelButtonText: '还没考虑',
-        focusConfirm: false
+        focusConfirm: false,
+        allowOutsideClick: false, // 新增
+        allowEscapeKey: false     // 新增
     }).then((result) => {
         if(result.isConfirmed) {
             const selected = document.querySelector('input[name="location"]:checked').value;
@@ -540,7 +558,9 @@ function showLocationSelector() {
                         <p>相遇～</p>
                        </div>`,
                 icon: 'success',
-                confirmButtonText: '❤️ 一言为定！'
+                confirmButtonText: '❤️ 一言为定！',
+                allowOutsideClick: false, // 新增
+                allowEscapeKey: false     // 新增
             });
          } else if(result.dismiss === Swal.DismissReason.cancel) {
             // 修改取消后的提示
@@ -550,7 +570,9 @@ function showLocationSelector() {
                 html: '<div style="color:#666;font-size:1.1em">'+
                       '未来的时间还很长<br>'+
                       '我们可以一起慢慢考虑。</div>',
-                confirmButtonText: '嗯，一起期待未来'
+                confirmButtonText: '嗯，一起期待未来',
+                allowOutsideClick: false, // 新增
+                allowEscapeKey: false     // 新增
             });
         }
     });
